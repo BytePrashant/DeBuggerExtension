@@ -10,6 +10,24 @@ function App() {
     setTitle("");
     setDesc("");
   };
+  function parsedData(data) {
+    console.log(data);
+  }
+  function callback(res) {
+    res.json().then(parsedData);
+  }
+  function sendTodo() {
+    fetch("http://localhost:3000/", {
+      method: "POST",
+      body: JSON.stringify({
+        title: "Work hard",
+        description: "Exercise from 8am to 9am",
+      }),
+      headers: {
+        "Content-Type": "application/json"
+      }
+    }).then(callback);
+  }
   return (
     <>
       <div className="flex flex-col items-center justify-center h-screen bg-black">
@@ -19,9 +37,7 @@ function App() {
         <div className="p-6 rounded-md shadow-md bg-slate-500">
           <form onSubmit={submitHandler}>
             <div className="mb-6">
-              <label
-                className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-              >
+              <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
                 Title
               </label>
               <input
@@ -34,9 +50,7 @@ function App() {
                 }}
               />
             </div>
-            <label
-              className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-            >
+            <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
               Description
             </label>
             <textarea
@@ -51,6 +65,7 @@ function App() {
             <button
               type="submit"
               className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 mr-4"
+              onClick={sendTodo}
             >
               Create Todo
             </button>
