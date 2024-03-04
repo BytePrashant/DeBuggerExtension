@@ -10,6 +10,23 @@ function App() {
     setTitle("");
     setDesc("");
   };
+  // Get todo
+  function getData(data){
+    console.log(data);
+    var todos = document.getElementById("showTodo");
+    todos.innerHTML = JSON.stringify(data);
+  }
+  function callback1(res){
+    res.json().then(getData);
+  }
+  function getTodo(){
+    fetch("http://localhost:3000", {
+      method: "GET"
+    }).then(callback1)
+  }
+  getTodo();
+
+  // Post todo
   function parsedData(data) {
     console.log(data);
   }
@@ -17,11 +34,13 @@ function App() {
     res.json().then(parsedData);
   }
   function sendTodo() {
+    var title = document.getElementById("title").value;
+    var description = document.getElementById("description").value;
     fetch("http://localhost:3000/", {
       method: "POST",
       body: JSON.stringify({
-        title: "Work hard",
-        description: "Exercise from 8am to 9am",
+        title: title,
+        description: description,
       }),
       headers: {
         "Content-Type": "application/json"
@@ -42,7 +61,7 @@ function App() {
               </label>
               <input
                 type="text"
-                id="large-input"
+                id="title"
                 className="block w-full p-4 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 text-base focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                 placeholder="Write your todo here..."
                 onChange={(e) => {
@@ -54,7 +73,7 @@ function App() {
               Description
             </label>
             <textarea
-              id="message"
+              id="description"
               rows="4"
               className="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 mb-4"
               placeholder="Write your description here..."
@@ -77,6 +96,10 @@ function App() {
             </button>
           </form>
         </div>
+
+      </div>
+      <div id="showTodo">
+        
       </div>
     </>
   );
