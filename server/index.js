@@ -9,13 +9,35 @@ app.use(cors());
 
 // Routes
 
+// Create a User
+app.post("/",async (req, res) => {
+  try {
+    const {name} = req.body;
+    const newUser = await pool.query('INSERT INTO client(name) VALUES($1) RETURNING user_id', [name]);
+    res.send(newUser.rows[0]);
+  } catch (err) {
+    console.error(err.message)
+  }
+})
+
+// Delete a User
+app.delete("/:id", async (req, res) => {
+  try {
+    const {id} = req.params;
+    await pool.query("DELETE FROM client WHERE user_id = $1", [id])
+    res.send("User deleted!!")
+  } catch (err) {
+    console.error(err.message)
+  }
+})
+
 // Create a todo
 app.post("/todos", async (req, res) => {
   try {
-    const { description } = req.body;
+    const { description, user_id } = req.body;
     const newTodo = await pool.query(
-      "INSERT INTO todo(description) VALUES($1) RETURNING *",
-      [description]
+      "INSERT INTO todo(description, user_id) VALUES($1, $2) RETURNING *",
+      [description, user_id]
     );
     res.send(newTodo.rows);
   } catch (err) {
