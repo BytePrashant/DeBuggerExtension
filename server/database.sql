@@ -7,5 +7,5 @@ create table todo(
 
 create table client(
     user_id serial primary key,
-    name varchar(255)
+    name varchar(255) not 
 )
