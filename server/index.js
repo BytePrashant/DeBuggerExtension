@@ -2,18 +2,28 @@ const express = require("express");
 const cors = require("cors");
 const app = express();
 const pool = require("./db");
+const session = require('express-session');
+const cookieParser = require('cookie-parser');
+
 
 // Middleware
 app.use(express.json());
 app.use(cors());
+app.use(cookieParser());
+app.use(session({
+  secret: 'myS3cr3t',
+  resave: false,
+  saveUninitialized: true,
+}));
 
 // Routes
 
 // Create a User
 app.post("/",async (req, res) => {
   try {
-    const {name} = req.body;
-    const newUser = await pool.query('INSERT INTO client(name) VALUES($1) RETURNING user_id', [name]);
+    const {username} = req.body;
+    const newUser = await pool.query('INSERT INTO client(username) VALUES($1) RETURNING *', [username]);
+    req.session.user_id = newUser.rows[0].user_id;
     res.send(newUser.rows[0]);
   } catch (err) {
     console.error(err.message)
@@ -34,9 +44,10 @@ app.delete("/:id", async (req, res) => {
 // Create a todo
 app.post("/todos", async (req, res) => {
   try {
-    const { description, user_id } = req.body;
+    const { description } = req.body;
+    const user_id = req.session.user_id;
     const newTodo = await pool.query(
-      "INSERT INTO todo(description, user_id) VALUES($1, $2) RETURNING *",
+      "INSERT INTO todo(description, user_id) VALUES($1, (SELECT user_id FROM client WHERE user_id = $2)) RETURNING *",
       [description, user_id]
     );
     res.send(newTodo.rows);
