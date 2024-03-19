@@ -1,18 +1,24 @@
 import { useState } from "react";
 
 function Todo() {
-  const [todo, setTodo] = useState("");
+  const [description, setDescription] = useState("");
+  
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const todoData = { todo };
+      const todoData = { description };
       console.log("************************")
-      await fetch("http://localhost:3000/todos/", {
+      const res =  await fetch("http://localhost:3000/todos/", {
         method: "POST",
         headers: { "content-type": "application/json" },
         body: JSON.stringify(todoData),
-      });
-      setTodo("");
+      }).then((response) => response.json())
+      .then((data) => {
+        console.log(data.user_id);
+      })
+      .catch((error) => console.error("Error:", error));
+      console.log(res);
+      setDescription("");
     } catch (err) {
       console.error(err.mesage);
     }
@@ -29,9 +35,9 @@ function Todo() {
             id="name"
             className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 mr-4"
             placeholder="Enter your priority"
-            value={todo}
+            value={description}
             required
-            onChange={(e) => setTodo(e.target.value)}
+            onChange={(e) => setDescription(e.target.value)}
           />
           <button
             type="submit"
@@ -53,7 +59,7 @@ function Todo() {
                 d="M1 5h12m0 0L9 1m4 4L9 9"
               />
             </svg>
-            <span class="sr-only">Icon description</span>
+            <span className="sr-only">Icon description</span>
           </button>
         </div>
       </form>
