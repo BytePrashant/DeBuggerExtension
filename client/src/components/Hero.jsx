@@ -1,13 +1,13 @@
-import Todo from "./Todo";
-import InProgress from "./InProgress";
-import Done from "./Done";
+import TodoBox from "./TodoBox";
+import InProgressBox from "./InProgressBox";
+import DoneBox from "./DoneBox";
 
 const Hero = () => {
   return (
-    <div className="flex flex-row p-16">
-      <Todo />
-      <InProgress />
-      <Done />
+    <div className="Container flex flex-row p-16 h-lvh items-center">
+      <TodoBox />
+      <InProgressBox />
+      <DoneBox />
     </div>
   );
 };
