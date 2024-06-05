@@ -24,7 +24,6 @@ const ShowPendingTodos = () => {
                   className="p-1 w-full"
                   onClick={() => {
                     sendToInProgress();
-                    setTodos(todos);
                   }}
                   icon={faArrowRight}
                   style={{ color: "#FFD43B" }}

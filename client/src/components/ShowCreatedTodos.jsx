@@ -1,5 +1,4 @@
-import React, { useEffect, useContext } from "react";
-import axios from "axios";
+import React, { useContext } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faTrash,
@@ -7,37 +6,40 @@ import {
   faArrowRight,
 } from "@fortawesome/free-solid-svg-icons";
 import TodoContext from "../utils/TodoContext";
+import axios from 'axios'
 
 const ShowCreatedTodos = () => {
-  const { todos } = useContext(TodoContext);
+  const { todos, setTodos } = useContext(TodoContext);
 
-  //   handle delete
-  const handleDelete = (id) => {
+  // handle Delete function
+  const handleDelete = async(id) => {
     axios
-      .delete(`http://localhost:3000/todos/${id}`)
-      .then((response) => {
-        setTodos(response);
-      })
-      .catch((error) => {
-        console.error("There was an error deleting the todo:", error);
-      });
-  };
-  // update todo
-  const handleEdit = (id) => {
-    axios
-      .put(`http://localhost:3000/${id}`)
-      .then((response) => {
-        setTodos(response);
-      })
-      .catch((error) => {
-        console.log("There was error an error updating the todo:", error);
-      });
+    .delete(`http://localhost:3000/todos/${id}`)
+    setTodos((prevTodos) => prevTodos.filter((todo) => todo._id !== id));
+  }
+
+  // handle Status change function
+  const sendToInProgress = async (todo) => {
+    try {
+      const updatedTodo = { ...todo, status: "pending" }; // Create a copy with updated status
+      const response = await axios.put(`http://localhost:3000/todos/${todo._id}`, updatedTodo); // Send a PUT request
+  
+      if (response.ok) {
+        // Update the local state with the updated todo (optional)
+        setTodos(prevTodos => prevTodos.map(prevTodo => prevTodo._id === todo._id ? updatedTodo : prevTodo));
+      } else {
+        throw new Error("Error updating todo status");
+      }
+    } catch (error) {
+      console.error("Error updating todo status:", error);
+      // Handle errors (e.g., display an error message to the user)
+    }
   };
 
   return (
     <div className="container h-full p-2 overflow-auto">
-      {todos.length > 0 ? (
-        todos
+     
+        {todos
           .filter((todo) => todo.status === "created")
           .map((todo) => (
             <div key={todo._id} className="border-2 flex w-full">
@@ -57,8 +59,7 @@ const ShowCreatedTodos = () => {
                 <FontAwesomeIcon
                   className="p-1 w-full"
                   onClick={() => {
-                    sendToInProgress();
-                    setTodos(todos);
+                    sendToInProgress(todo);
                   }}
                   icon={faArrowRight}
                   style={{ color: "#FFD43B" }}
@@ -66,11 +67,7 @@ const ShowCreatedTodos = () => {
               </div>
             </div>
           ))
-      ) : (
-        <p className="border-2 h-full flex items-center justify-center font-semibold text-xl">
-          No bugs for today?
-        </p>
-      )}
+      }
     </div>
   );
 };
