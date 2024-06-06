@@ -12,15 +12,15 @@ router.get("/", async (req, res) => {
       data: todos,
     });
   } catch (error) {
-    console.log(error.message);
+    console.log(`yahan get request mai hu ${error.message}`);
   }
 });
 
 // get a single todo
 router.get("/:id", async (req, res) => {
   try {
-    const { id } = req.params;
-    const todo = await Todo.findById(id);
+    const { status } = req.params;
+    const todo = await Todo.findById(status);
     return res.status(201).json(todo);
   } catch (error) {
     console.log(error.message);
@@ -31,33 +31,32 @@ router.get("/:id", async (req, res) => {
 router.post("/", async (req, res) => {
   try {
     if (!req.body.title) {
-      return res.status(500).send({ message: "Title is not there" });
+      return res.status(400).send({ message: "Title is required" });
     }
+    const {title, description, status} = req.body
+    const newTodo = {
+      title,
+      description,
+      status
+    };
+    const todo = await Todo.create(newTodo);
+    return res.status(201).send(todo);
   } catch (error) {
-    console.log(error.message);
+    console.log(`createTodo wale route mai error aarha h ${error.message}`);
   }
-
-  const newTodo = {
-    title: req.body.title,
-    description: req.body.description,
-  };
-
-  const todo = await Todo.create(newTodo);
-
-  return res.status(201).send(todo);
 });
 
 // update a todo
 router.put("/:id", async (req, res) => {
+  const { id } = req.params;
+  const updatedTodo = req.body;
   try {
-    const { id } = req.params;
-    const result = await Todo.findByIdAndUpdate(id, req.body);
-    if (!result) {
+    const todo = await Todo.findByIdAndUpdate(id, updatedTodo);
+    if (!todo) {
       return res.status(404).send({ message: "Todo not found" });
     }
-    return res.status(200).send("Todo updated successfully");
+    return res.status(200);
   } catch (error) {
-    console.log(error.message);
     res.status(500).send({ messsage: error.message });
   }
 });
