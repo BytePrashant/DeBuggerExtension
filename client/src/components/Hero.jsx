@@ -20,7 +20,7 @@ const Hero = () => {
       });
   }, []);
 
-  // change status to pending
+  // handle Status change function
   const sendToPending = async (todo) => {
     try {
       const updatedTodo = { ...todo, status: "pending" };
@@ -29,22 +29,47 @@ const Hero = () => {
           prevTodo._id === todo._id ? updatedTodo : prevTodo
         )
       );
-      await axios.put(`http://localhost:3000/todos/${todo._id}`, updatedTodo); // Send a PUT request
+
+      const response = await axios.put(
+        `http://localhost:3000/todos/${todo._id}`,
+        updatedTodo
+      );
+
+      if (!response.ok) {
+        setTodos((prevTodos) =>
+          prevTodos.map((prevTodo) =>
+            prevTodo._id === todo._id ? todo : prevTodo
+          )
+        );
+        throw new Error("Error updating todo status");
+      }
     } catch (error) {
       console.error("Error updating todo status:", error);
     }
   };
 
-  // change status to completed
+  // handle Status change function
   const sendToCompleted = async (todo) => {
     try {
-      const updatedTodo = { ...todo, status: "completed" }; // Create a copy with updated status
+      const updatedTodo = { ...todo, status: "completed" };
       setTodos((prevTodos) =>
         prevTodos.map((prevTodo) =>
           prevTodo._id === todo._id ? updatedTodo : prevTodo
         )
       );
-      await axios.put(`http://localhost:3000/todos/${todo._id}`, updatedTodo);
+      const response = await axios.put(
+        `http://localhost:3000/todos/${todo._id}`,
+        updatedTodo
+      );
+      if (!response.ok) {
+        setTodos((prevTodos) =>
+          prevTodos.map((prevTodo) =>
+            prevTodo._id === todo._id ? todo : prevTodo
+          )
+        );
+      } else {
+        throw new Error("Error updating todo status");
+      }
     } catch (error) {
       console.error("Error updating todo status:", error);
     }
