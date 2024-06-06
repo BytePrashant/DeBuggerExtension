@@ -9,6 +9,10 @@ const todoSchema = mongoose.Schema({
   description: {
     type: String,
     required: false,
+  },
+  status: {
+    type: String,
+    required: true,
   }
 });
 
