@@ -1,10 +1,10 @@
 import React, { useContext } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faArrowRight } from "@fortawesome/free-solid-svg-icons";
+import { faTrash, faArrowRight } from "@fortawesome/free-solid-svg-icons";
 import TodoContext from "../utils/TodoContext";
 
 const ShowPendingTodos = () => {
-  const { todos } = useContext(TodoContext);
+  const { todos, sendToCompleted, handleDelete } = useContext(TodoContext);
 
   return (
     <div className="container h-full p-2 overflow-auto">
@@ -22,8 +22,14 @@ const ShowPendingTodos = () => {
               <div className="flex items-center justify-center w-1/5">
                 <FontAwesomeIcon
                   className="p-1 w-full"
+                  onClick={() => handleDelete(todo._id)}
+                  icon={faTrash}
+                  style={{ color: "#e69b19" }}
+                />
+                <FontAwesomeIcon
+                  className="p-1 w-full"
                   onClick={() => {
-                    sendToInProgress();
+                    sendToCompleted(todo);
                   }}
                   icon={faArrowRight}
                   style={{ color: "#FFD43B" }}
@@ -33,7 +39,7 @@ const ShowPendingTodos = () => {
           ))
       ) : (
         <p className="border-2 h-full flex items-center justify-center font-semibold text-xl">
-          No bugs for today?
+          No pending bugs...
         </p>
       )}
     </div>
