@@ -1,10 +1,11 @@
 import React, { useContext } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faArrowRight } from "@fortawesome/free-solid-svg-icons";
+import { faTrash } from "@fortawesome/free-solid-svg-icons";
 import TodoContext from "../utils/TodoContext";
 
 const ShowCompletedTodos = () => {
-  const { todos } = useContext(TodoContext);
+  const { todos, handleDelete } = useContext(TodoContext);
+
   
   return (
     <div className="container h-full p-2 overflow-auto">
@@ -22,18 +23,16 @@ const ShowCompletedTodos = () => {
               <div className="flex items-center justify-center w-1/5">
                 <FontAwesomeIcon
                   className="p-1 w-full"
-                  onClick={() => {
-                    sendToInProgress();
-                  }}
-                  icon={faArrowRight}
-                  style={{ color: "#FFD43B" }}
+                  onClick={() => handleDelete(todo._id)}
+                  icon={faTrash}
+                  style={{ color: "#e69b19" }}
                 />
               </div>
             </div>
           ))
       ) : (
         <p className="border-2 h-full flex items-center justify-center font-semibold text-xl">
-          No bugs for today?
+          No bugs solved yet...
         </p>
       )}
     </div>
