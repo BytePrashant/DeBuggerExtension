@@ -41,3 +41,6 @@ npm run start
 ```bash
 npm run dev
 ```
+
+
+### Currently trying to connect it to Firebase and will make it a browser extension.
