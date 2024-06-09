@@ -11,7 +11,7 @@ const Hero = () => {
   // Read all todos
   useEffect(() => {
     axios
-      .get("http://localhost:3000/todos")
+      .get("https://debuggerextension.onrender.com/todos")
       .then((response) => {
         setTodos(response.data.data);
       })
@@ -31,7 +31,7 @@ const Hero = () => {
       );
 
       const response = await axios.put(
-        `http://localhost:3000/todos/${todo._id}`,
+        `https://debuggerextension.onrender.com/todos/${todo._id}`,
         updatedTodo
       );
 
@@ -58,7 +58,7 @@ const Hero = () => {
         )
       );
       const response = await axios.put(
-        `http://localhost:3000/todos/${todo._id}`,
+        `https://debuggerextension.onrender.com/todos/${todo._id}`,
         updatedTodo
       );
       if (!response.ok) {
@@ -77,7 +77,7 @@ const Hero = () => {
 
   // handle Delete function
   const handleDelete = async (id) => {
-    axios.delete(`http://localhost:3000/todos/${id}`);
+    axios.delete(`https://debuggerextension.onrender.com/todos/${id}`);
     setTodos((prevTodos) => prevTodos.filter((todo) => todo._id !== id));
   };
 

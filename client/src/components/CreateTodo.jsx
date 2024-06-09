@@ -22,7 +22,7 @@ const CreateTodo = () => {
     };
 
     try {
-      const response = await axios.post("http://localhost:3000/todos", newTodo);
+      const response = await axios.post("https://debuggerextension.onrender.com/todos", newTodo);
       setTodos([...todos, response.data]);
     } catch (error) {
       console.log("Error creating a todo", error);
