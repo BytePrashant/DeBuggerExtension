@@ -18,6 +18,10 @@ Begin by cloning this repository using Git:
 
 ```bash
 git clone https://github.com/BytePrashant/DeBuggerExtension.git
+<<<<<<< HEAD
+=======
+
+>>>>>>> 8e6cf624437c53700917bed95a33d33b72398c45
 ```
 ### 2. Install Dependencies:
 
@@ -25,7 +29,10 @@ Navigate to the project directory:
 
 ```bash
 cd DeBuggerExtension
+<<<<<<< HEAD
 
+=======
+>>>>>>> 8e6cf624437c53700917bed95a33d33b72398c45
 ```
 Then, install all the required dependencies for both the frontend and backend:
 ```bash
@@ -40,4 +47,11 @@ npm run start
 ### 4. Start the Frontend Server:
 ```bash
 npm run dev
+<<<<<<< HEAD
 ```
+=======
+```
+
+
+### Currently trying to connect it to Firebase and will make it a browser extension.
+>>>>>>> 8e6cf624437c53700917bed95a33d33b72398c45
